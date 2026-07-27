@@ -1,4 +1,5 @@
 from langchain.chat_models import init_chat_model
+from langchain_core.messages import AIMessage, SystemMessage, HumanMessage
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -8,16 +9,18 @@ model = init_chat_model(
 )
 
 # Storing the prompts and response in order to maintain a chat memory
-messages = []
+messages = [
+    SystemMessage(content="You are a funny AI agent.")
+]
 
 print("--------- Welcome! Enter '0' to exit ---------")
 while True:
     prompt = input("You: ")
-    messages.append(prompt)
+    messages.append(HumanMessage(content=prompt))
     if(prompt == "0"):
         break
     response = model.invoke(messages)
-    messages.append(response.content)
+    messages.append(AIMessage(content=response.content))
     print(f"AI: {response.content}")
 
 # Printing the messages and response when pressed 0
