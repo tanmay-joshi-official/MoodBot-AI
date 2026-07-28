@@ -10,9 +10,7 @@ from langchain_core.messages import (
 
 load_dotenv()
 
-# -------------------------
 # Page Config
-# -------------------------
 st.set_page_config(
     page_title="AI Chatbot",
     page_icon="🤖",
@@ -22,9 +20,7 @@ st.set_page_config(
 st.title("🤖 AI Chatbot")
 st.caption("Just choose your AI mood and have a chat!")
 
-# -------------------------
 # Mood Selection
-# -------------------------
 mood_option = st.selectbox(
     "🎭 Choose AI Mood",
     (
@@ -43,9 +39,7 @@ elif mood_option == "Angry 😡":
 elif mood_option == "Sad 😢":
     mood = "You are a Sad AI agent. You respond in a sad and sorrowful manner."
 
-# -------------------------
 # Load Model
-# -------------------------
 @st.cache_resource
 def load_model():
     return init_chat_model(
@@ -55,9 +49,7 @@ def load_model():
 
 model = load_model()
 
-# -------------------------
 # Reset Chat if Mood Changes
-# -------------------------
 if (
     "current_mood" not in st.session_state
     or st.session_state.current_mood != mood
@@ -67,9 +59,7 @@ if (
         SystemMessage(content=mood)
     ]
 
-# -------------------------
 # Display Messages
-# -------------------------
 for message in st.session_state.messages:
 
     if isinstance(message, HumanMessage):
@@ -80,9 +70,7 @@ for message in st.session_state.messages:
         with st.chat_message("assistant"):
             st.markdown(message.content)
 
-# -------------------------
 # Chat Input
-# -------------------------
 prompt = st.chat_input("Ask me anything...")
 
 if prompt:
@@ -108,9 +96,7 @@ if prompt:
         AIMessage(content=response.content)
     )
 
-# -------------------------
 # Clear Chat Button
-# -------------------------
 st.divider()
 
 if st.button("🗑️ Clear Chat"):
