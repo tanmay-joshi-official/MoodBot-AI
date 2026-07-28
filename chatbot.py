@@ -10,17 +10,42 @@ from langchain_core.messages import (
 
 load_dotenv()
 
+# -------------------------
 # Page Config
+# -------------------------
 st.set_page_config(
-    page_title="Funny AI Chatbot",
+    page_title="AI Chatbot",
     page_icon="🤖",
     layout="centered"
 )
 
-st.title("🤖 Funny AI Chatbot")
-st.caption("Powered by LangChain + Mistral")
+st.title("🤖 AI Chatbot")
+st.caption("Just choose your AI mood and have a chat!")
 
+# -------------------------
+# Mood Selection
+# -------------------------
+mood_option = st.selectbox(
+    "🎭 Choose AI Mood",
+    (
+        "Funny 😂",
+        "Angry 😡",
+        "Sad 😢",
+    )
+)
+
+if mood_option == "Funny 😂":
+    mood = "You are a Funny AI agent. You respond with humor and jokes."
+
+elif mood_option == "Angry 😡":
+    mood = "You are an Angry AI agent. You respond aggressively and impatiently."
+
+elif mood_option == "Sad 😢":
+    mood = "You are a Sad AI agent. You respond in a sad and sorrowful manner."
+
+# -------------------------
 # Load Model
+# -------------------------
 @st.cache_resource
 def load_model():
     return init_chat_model(
@@ -30,13 +55,21 @@ def load_model():
 
 model = load_model()
 
-# Chat Memory
-if "messages" not in st.session_state:
+# -------------------------
+# Reset Chat if Mood Changes
+# -------------------------
+if (
+    "current_mood" not in st.session_state
+    or st.session_state.current_mood != mood
+):
+    st.session_state.current_mood = mood
     st.session_state.messages = [
-        SystemMessage(content="You are a funny AI agent.")
+        SystemMessage(content=mood)
     ]
 
-# Display Chat
+# -------------------------
+# Display Messages
+# -------------------------
 for message in st.session_state.messages:
 
     if isinstance(message, HumanMessage):
@@ -47,20 +80,20 @@ for message in st.session_state.messages:
         with st.chat_message("assistant"):
             st.markdown(message.content)
 
-# User Input
+# -------------------------
+# Chat Input
+# -------------------------
 prompt = st.chat_input("Ask me anything...")
 
 if prompt:
-
-    # Show User Message
-    with st.chat_message("user"):
-        st.markdown(prompt)
 
     st.session_state.messages.append(
         HumanMessage(content=prompt)
     )
 
-    # AI Response
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
     with st.chat_message("assistant"):
 
         with st.spinner("Thinking..."):
@@ -74,3 +107,14 @@ if prompt:
     st.session_state.messages.append(
         AIMessage(content=response.content)
     )
+
+# -------------------------
+# Clear Chat Button
+# -------------------------
+st.divider()
+
+if st.button("🗑️ Clear Chat"):
+    st.session_state.messages = [
+        SystemMessage(content=mood)
+    ]
+    st.rerun()
