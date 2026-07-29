@@ -1,4 +1,4 @@
-# 🤖 AI Mood Chatbot
+# 🤖 MoodBot AI
 
 An interactive AI chatbot built using **Streamlit**, **LangChain**, and **Mistral AI**. Choose your chatbot's mood and have a unique conversation based on its personality.
 
