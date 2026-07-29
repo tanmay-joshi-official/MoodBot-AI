@@ -12,12 +12,12 @@ load_dotenv()
 
 # Page Config
 st.set_page_config(
-    page_title="AI Chatbot",
+    page_title="MoodBot AI",
     page_icon="🤖",
     layout="centered"
 )
 
-st.title("🤖 AI Chatbot")
+st.title("🤖 MoodBot AI")
 st.caption("Just choose your AI mood and have a chat!")
 
 # Mood Selection
